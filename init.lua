@@ -150,6 +150,18 @@ require('lazy').setup({
   },
 
   {
+    'ggandor/leap.nvim',
+    config = function()
+      require('leap').add_default_mappings()
+    end
+  },
+  {
+    'ggandor/flit.nvim',
+    config = function()
+      require('flit').setup()
+    end
+  },
+  {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
