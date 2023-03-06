@@ -394,13 +394,13 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-  nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+  nmap('<leader>cr', vim.lsp.buf.rename, '[R]ename')
+  nmap('<leader>ca', vim.lsp.buf.code_action, 'Code [A]ction')
 
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-  nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
+  nmap('<leader>cD', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
@@ -436,7 +436,6 @@ local servers = {
   svelte = {},
   tailwindcss = {},
   eslint = {},
-
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -538,40 +537,80 @@ end
 
 leadercmdmap("pp", "Telescope projects")
 
+local leader_prefix = function(key, name)
+  require("which-key").register({
+        [key] = {
+      name = name
+    }
+  }, { prefix = "<leader>" })
+end
+
 
 leadermap(",", require('telescope.builtin').buffers, "buffers") --, { desc = '[,] Find existing buffers' })
 -- See `:help telescope.builtin`
+-- F : File
+leader_prefix("f", "files")
 leadermap("fr", require('telescope.builtin').oldfiles, 'recent files')
 leadermap("fs", "<cmd>write<CR>", "save file")
+leadermap("fg", require('telescope.builtin').git_files)
+leadermap("fp", "<cmd>lua require('telescope.builtin').find_files { cwd = '~/.config/nvim' }<CR>", "config files")
 
-
+leader_prefix("q", "quit")
 leadermap("qq", "<cmd>quitall<CR>", "quit")
 
+
+leader_prefix("<Tab>", "tabs")
 leadermap("<Tab>n", "<cmd>tabnew<CR>", "new tab")
-vim.keymap.set("n","<M-1>", "1gt")
-vim.keymap.set("n","<M-2>", "2gt")
-vim.keymap.set("n","<M-3>", "3gt")
-vim.keymap.set("n","<M-4>", "4gt")
-vim.keymap.set("n","<M-5>", "5gt")
+leadermap("<Tab>d", "<cmd>tabclose<CR>", "close tab")
+vim.keymap.set("n", "<M-1>", "1gt")
+vim.keymap.set("n", "<M-2>", "2gt")
+vim.keymap.set("n", "<M-3>", "3gt")
+vim.keymap.set("n", "<M-4>", "4gt")
+vim.keymap.set("n", "<M-5>", "5gt")
+vim.keymap.set("n", "<M-6>", "6gt")
+vim.keymap.set("n", "<M-7>", "7gt")
+vim.keymap.set("n", "<M-8>", "8gt")
+vim.keymap.set("n", "<M-9>", "9gt")
 
 
 leadermap("<Space>", "<cmd>lua require('telescope.builtin').git_files{ show_untracked = true }<CR>")
-leadermap(".", "<cmd>Telescope fd path=%:p:h<CR>")
+leadermap(".", "<cmd>Telescope file_browser path=%:p:h<CR>")
+
+leadermap("'", "<cmd>lua require('telescope.builtin').resume{}<CR>")
+
+leader_prefix("b", "buffers")
+leadermap("bb", "<cmd>lua require('telescope.builtin').buffers{ show_all_buffers = true }<CR>", "list all buffers")
+-- H : Help
+leader_prefix("h", "help")
+leadermap("hk", "<cmd>lua require('telescope.builtin').keymaps{}<CR>", "keys")
+leadermap("ha", require('telescope.builtin').help_tags, 'apropos')
+-- S : Search
+
+leader_prefix("s", "search")
+leadermap("sp", "<cmd>lua require('telescope.builtin').live_grep{}<CR>", "search project")
+leadermap("sr", "<cmd>lua require('telescope.builtin').lsp_references{}<CR>") -- ???
+leadermap("ss", "<cmd>lua require('telescope.builtin').lsp_workspace_symbols{}<CR>")
+-- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 
 
-vim.keymap.set('n', '<leader>/', function()
+
+vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+
+
+-- L : Lists
+leadermap("ll", "<cmd>lua require('telescope.builtin').loclist{}<CR>")
+leadermap("lq", "<cmd>lua require('telescope.builtin').quickfix{}<CR>")
+
+
+vim.keymap.set('n', '<leader>sb', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
     previewer = false,
   })
-end, { desc = '[/] Fuzzily search in current buffer' })
+end, { desc = 'search buffer' })
 
-vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
-vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
-vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
