@@ -128,17 +128,18 @@ require('lazy').setup({
     opts = {
       flavour = 'latte',
     },
-    config = function()
-      require('catppuccin').setup()
-      vim.cmd.colorscheme 'catppuccin-mocha'
-    end,
+    -- config = function()
+    --   require('catppuccin').setup()
+    --   -- vim.cmd.colorscheme 'catppuccin-mocha'
+    -- end,
   },
+  { 'rebelot/kanagawa.nvim' },
   -- {
-  --   'kamwitsta/flatwhite-vim',
-  --   priority=1000,
-  --   -- config=function ()
-  --   --   vim.cmd.colorscheme 'flatwhite'
-  --   -- end,
+    -- 'kamwitsta/flatwhite-vim',
+    -- priority=1000,
+    -- config=function ()
+    --   vim.cmd.colorscheme 'flatwhite'
+    -- end,
   -- },
 
   {
@@ -186,6 +187,14 @@ require('lazy').setup({
     },
   },
 
+  {'nvim-treesitter/playground'},
+  {dir = "~/code/flatwhite.nvim",
+    config = function()
+      -- require('flatwhite').setup()
+      vim.cmd.colorscheme 'flatwhite'
+    end,
+  },
+  { "norcalli/nvim-colorizer.lua"  },
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim',         opts = {} },
 
@@ -615,10 +624,17 @@ end, { desc = 'search buffer' })
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>ee', vim.diagnostic.open_float)
+vim.keymap.set('n', '<leader>eq', vim.diagnostic.setloclist)
 
-
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    underline = true,
+    virtual_text = false,
+    signs = true,
+    update_in_insert = false,
+  }
+)
 
 
 
