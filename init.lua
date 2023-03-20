@@ -168,9 +168,9 @@ require('lazy').setup({
     -- See `:help lualine.txt`
     opts = {
       options = {
-        icons_enabled = false,
+        icons_enabled = true,
         theme = 'auto',
-        component_separators = '|',
+        component_separators = '',
         section_separators = '',
       },
     },
@@ -197,7 +197,7 @@ require('lazy').setup({
   },
   { 'norcalli/nvim-colorizer.lua' },
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',         opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -414,8 +414,8 @@ local on_attach = function(_, bufnr)
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
   nmap('<leader>cD', vim.lsp.buf.type_definition, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('<leader>cS', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+  nmap('<leader>cs', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -423,9 +423,9 @@ local on_attach = function(_, bufnr)
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
+  nmap('<leader>cfa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+  nmap('<leader>cfr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+  nmap('<leader>cfl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
@@ -545,10 +545,6 @@ local leadercmdmap = function(keys, func, desc)
   leadermap(keys, '<cmd>' .. func .. '<CR>', desc)
 end
 
--- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
-
-leadercmdmap('pp', 'Telescope projects')
-
 local leader_prefix = function(key, name)
   require('which-key').register({
     [key] = {
@@ -556,6 +552,13 @@ local leader_prefix = function(key, name)
     },
   }, { prefix = '<leader>' })
 end
+-- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+
+leader_prefix('i', 'insert')
+leadercmdmap('ir', 'Telescope registers')
+
+leadercmdmap('pp', 'Telescope projects')
+
 
 leadermap(',', require('telescope.builtin').buffers, 'buffers') --, { desc = '[,] Find existing buffers' })
 -- See `:help telescope.builtin`
@@ -565,6 +568,9 @@ leadermap('fr', require('telescope.builtin').oldfiles, 'recent files')
 leadermap('fs', '<cmd>write<CR>', 'save file')
 leadermap('fg', require('telescope.builtin').git_files)
 leadermap('fp', "<cmd>lua require('telescope.builtin').find_files { cwd = '~/.config/nvim' }<CR>", 'config files')
+
+leader_prefix('t', 'toggle')
+leadercmdmap('tt', 'split +terminal')
 
 leader_prefix('q', 'quit')
 leadermap('qq', '<cmd>quitall<CR>', 'quit')
