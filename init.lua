@@ -247,7 +247,7 @@ require('lazy').setup({
 -- See `:help vim.o`
 
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
 
 -- Make line numbers default
 vim.wo.number = true
@@ -664,5 +664,6 @@ vim.api.nvim_create_autocmd({ 'BufReadPost' }, {
 
 vim.cmd [[autocmd FileType help wincmd L]]
 
+vim.keymap.set('n', '<ESC>', '<cmd>nohls<CR>')
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
