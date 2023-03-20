@@ -668,5 +668,10 @@ vim.api.nvim_create_autocmd({ 'BufReadPost' }, {
 vim.cmd [[autocmd FileType help wincmd L]]
 
 vim.keymap.set('n', '<ESC>', '<cmd>nohls<CR>')
+
+
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+vim.api.nvim_create_autocmd({ "BufEnter" }, { pattern = { "*" }, command = "normal zx", })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
