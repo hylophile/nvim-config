@@ -98,7 +98,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',          opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -135,32 +135,32 @@ require('lazy').setup({
   },
   { 'rebelot/kanagawa.nvim' },
   -- {
-    -- 'kamwitsta/flatwhite-vim',
-    -- priority=1000,
-    -- config=function ()
-    --   vim.cmd.colorscheme 'flatwhite'
-    -- end,
+  -- 'kamwitsta/flatwhite-vim',
+  -- priority=1000,
+  -- config=function ()
+  --   vim.cmd.colorscheme 'flatwhite'
+  -- end,
   -- },
 
   {
     'ahmedkhalf/project.nvim',
     config = function()
       require('project_nvim').setup {}
-      require('telescope').load_extension('projects')
-    end
+      require('telescope').load_extension 'projects'
+    end,
   },
 
   {
     'ggandor/leap.nvim',
     config = function()
       require('leap').add_default_mappings()
-    end
+    end,
   },
   {
     'ggandor/flit.nvim',
     config = function()
       require('flit').setup()
-    end
+    end,
   },
   {
     -- Set lualine as statusline
@@ -186,17 +186,18 @@ require('lazy').setup({
       show_trailing_blankline_indent = false,
     },
   },
-
-  {'nvim-treesitter/playground'},
-  {dir = "~/code/flatwhite.nvim",
+  { 'rmagatti/auto-session' },
+  { 'nvim-treesitter/playground' },
+  {
+    dir = '~/code/misc/flatwhite.nvim',
     config = function()
       -- require('flatwhite').setup()
       vim.cmd.colorscheme 'flatwhite'
     end,
   },
-  { "norcalli/nvim-colorizer.lua"  },
+  { 'norcalli/nvim-colorizer.lua' },
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',         opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -310,8 +311,8 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-            ['<C-u>'] = false,
-            ['<C-d>'] = false,
+        ['<C-u>'] = false,
+        ['<C-d>'] = false,
       },
     },
   },
@@ -346,41 +347,41 @@ require('nvim-treesitter.configs').setup {
       lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
       keymaps = {
         -- You can use the capture groups defined in textobjects.scm
-            ['aa'] = '@parameter.outer',
-            ['ia'] = '@parameter.inner',
-            ['af'] = '@function.outer',
-            ['if'] = '@function.inner',
-            ['ac'] = '@class.outer',
-            ['ic'] = '@class.inner',
+        ['aa'] = '@parameter.outer',
+        ['ia'] = '@parameter.inner',
+        ['af'] = '@function.outer',
+        ['if'] = '@function.inner',
+        ['ac'] = '@class.outer',
+        ['ic'] = '@class.inner',
       },
     },
     move = {
       enable = true,
       set_jumps = true, -- whether to set jumps in the jumplist
       goto_next_start = {
-            [']m'] = '@function.outer',
-            [']]'] = '@class.outer',
+        [']m'] = '@function.outer',
+        [']]'] = '@class.outer',
       },
       goto_next_end = {
-            [']M'] = '@function.outer',
-            [']['] = '@class.outer',
+        [']M'] = '@function.outer',
+        [']['] = '@class.outer',
       },
       goto_previous_start = {
-            ['[m'] = '@function.outer',
-            ['[['] = '@class.outer',
+        ['[m'] = '@function.outer',
+        ['[['] = '@class.outer',
       },
       goto_previous_end = {
-            ['[M'] = '@function.outer',
-            ['[]'] = '@class.outer',
+        ['[M'] = '@function.outer',
+        ['[]'] = '@class.outer',
       },
     },
     swap = {
       enable = true,
       swap_next = {
-            ['<leader>a'] = '@parameter.inner',
+        ['<leader>a'] = '@parameter.inner',
       },
       swap_previous = {
-            ['<leader>A'] = '@parameter.inner',
+        ['<leader>A'] = '@parameter.inner',
       },
     },
   },
@@ -493,14 +494,14 @@ cmp.setup {
     end,
   },
   mapping = cmp.mapping.preset.insert {
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete {},
-        ['<CR>'] = cmp.mapping.confirm {
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete {},
+    ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-        ['<Tab>'] = cmp.mapping(function(fallback)
+    ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       elseif luasnip.expand_or_jumpable() then
@@ -509,7 +510,7 @@ cmp.setup {
         fallback()
       end
     end, { 'i', 's' }),
-        ['<S-Tab>'] = cmp.mapping(function(fallback)
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       elseif luasnip.jumpable(-1) then
@@ -526,11 +527,10 @@ cmp.setup {
 }
 
 if vim.g.neovide then
-  vim.o.guifont = "Agave:h13" -- text below applies for VimScript
-  vim.g.neovide_cursor_vfx_mode = "torpedo"
+  vim.o.guifont = 'Agave:h13' -- text below applies for VimScript
+  vim.g.neovide_cursor_vfx_mode = 'torpedo'
   vim.g.neovide_cursor_vfx_particle_lifetime = 1.0
 end
-
 
 local leadermap = function(keys, func, desc)
   desc = desc or func
@@ -539,78 +539,73 @@ local leadermap = function(keys, func, desc)
 end
 
 local leadercmdmap = function(keys, func, desc)
-  leadermap(keys, "<cmd>" .. func .. "<CR>", desc)
+  leadermap(keys, '<cmd>' .. func .. '<CR>', desc)
 end
 
 -- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 
-leadercmdmap("pp", "Telescope projects")
+leadercmdmap('pp', 'Telescope projects')
 
 local leader_prefix = function(key, name)
-  require("which-key").register({
-        [key] = {
-      name = name
-    }
-  }, { prefix = "<leader>" })
+  require('which-key').register({
+    [key] = {
+      name = name,
+    },
+  }, { prefix = '<leader>' })
 end
 
-
-leadermap(",", require('telescope.builtin').buffers, "buffers") --, { desc = '[,] Find existing buffers' })
+leadermap(',', require('telescope.builtin').buffers, 'buffers') --, { desc = '[,] Find existing buffers' })
 -- See `:help telescope.builtin`
 -- F : File
-leader_prefix("f", "files")
-leadermap("fr", require('telescope.builtin').oldfiles, 'recent files')
-leadermap("fs", "<cmd>write<CR>", "save file")
-leadermap("fg", require('telescope.builtin').git_files)
-leadermap("fp", "<cmd>lua require('telescope.builtin').find_files { cwd = '~/.config/nvim' }<CR>", "config files")
+leader_prefix('f', 'files')
+leadermap('fr', require('telescope.builtin').oldfiles, 'recent files')
+leadermap('fs', '<cmd>write<CR>', 'save file')
+leadermap('fg', require('telescope.builtin').git_files)
+leadermap('fp', "<cmd>lua require('telescope.builtin').find_files { cwd = '~/.config/nvim' }<CR>", 'config files')
 
-leader_prefix("q", "quit")
-leadermap("qq", "<cmd>quitall<CR>", "quit")
+leader_prefix('q', 'quit')
+leadermap('qq', '<cmd>quitall<CR>', 'quit')
 
+leader_prefix('<Tab>', 'tabs')
+leadermap('<Tab>n', '<cmd>tabnew<CR>', 'new tab')
+leadermap('<Tab>d', '<cmd>tabclose<CR>', 'close tab')
+vim.keymap.set('n', '<M-1>', '1gt')
+vim.keymap.set('n', '<M-2>', '2gt')
+vim.keymap.set('n', '<M-3>', '3gt')
+vim.keymap.set('n', '<M-4>', '4gt')
+vim.keymap.set('n', '<M-5>', '5gt')
+vim.keymap.set('n', '<M-6>', '6gt')
+vim.keymap.set('n', '<M-7>', '7gt')
+vim.keymap.set('n', '<M-8>', '8gt')
+vim.keymap.set('n', '<M-9>', '9gt')
 
-leader_prefix("<Tab>", "tabs")
-leadermap("<Tab>n", "<cmd>tabnew<CR>", "new tab")
-leadermap("<Tab>d", "<cmd>tabclose<CR>", "close tab")
-vim.keymap.set("n", "<M-1>", "1gt")
-vim.keymap.set("n", "<M-2>", "2gt")
-vim.keymap.set("n", "<M-3>", "3gt")
-vim.keymap.set("n", "<M-4>", "4gt")
-vim.keymap.set("n", "<M-5>", "5gt")
-vim.keymap.set("n", "<M-6>", "6gt")
-vim.keymap.set("n", "<M-7>", "7gt")
-vim.keymap.set("n", "<M-8>", "8gt")
-vim.keymap.set("n", "<M-9>", "9gt")
-
-
-leadermap("<Space>", "<cmd>lua require('telescope.builtin').git_files{ show_untracked = true }<CR>")
-leadermap(".", "<cmd>Telescope file_browser path=%:p:h<CR>")
+leadermap('<Space>', '<cmd>Telescope find_files<CR>')
+-- leadermap("<Space>", "<cmd>lua require('telescope.builtin').git_files{ show_untracked = true }<CR>")
+leadermap('.', '<cmd>Telescope file_browser path=%:p:h<CR>')
 
 leadermap("'", "<cmd>lua require('telescope.builtin').resume{}<CR>")
 
-leader_prefix("b", "buffers")
-leadermap("bb", "<cmd>lua require('telescope.builtin').buffers{ show_all_buffers = true }<CR>", "list all buffers")
+leader_prefix('b', 'buffers')
+leadermap('bb', "<cmd>lua require('telescope.builtin').buffers{ show_all_buffers = true }<CR>", 'list all buffers')
 -- H : Help
-leader_prefix("h", "help")
-leadermap("hk", "<cmd>lua require('telescope.builtin').keymaps{}<CR>", "keys")
-leadermap("ha", require('telescope.builtin').help_tags, 'apropos')
+leader_prefix('h', 'help')
+leadermap('hk', "<cmd>lua require('telescope.builtin').keymaps{}<CR>", 'keys')
+leadermap('ha', require('telescope.builtin').help_tags, 'apropos')
 -- S : Search
 
-leader_prefix("s", "search")
-leadermap("sp", "<cmd>lua require('telescope.builtin').live_grep{}<CR>", "search project")
-leadermap("sr", "<cmd>lua require('telescope.builtin').lsp_references{}<CR>") -- ???
-leadermap("ss", "<cmd>lua require('telescope.builtin').lsp_workspace_symbols{}<CR>")
+leader_prefix('s', 'search')
+leadermap('sp', "<cmd>lua require('telescope.builtin').live_grep{}<CR>", 'search project')
+leadermap('/', "<cmd>lua require('telescope.builtin').live_grep{}<CR>", 'search project')
+leadermap('sr', "<cmd>lua require('telescope.builtin').lsp_references{}<CR>") -- ???
+leadermap('ss', "<cmd>lua require('telescope.builtin').lsp_workspace_symbols{}<CR>")
 -- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 
-
-
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
-
 -- L : Lists
-leadermap("ll", "<cmd>lua require('telescope.builtin').loclist{}<CR>")
-leadermap("lq", "<cmd>lua require('telescope.builtin').quickfix{}<CR>")
-
+leadermap('ll', "<cmd>lua require('telescope.builtin').loclist{}<CR>")
+leadermap('lq', "<cmd>lua require('telescope.builtin').quickfix{}<CR>")
 
 vim.keymap.set('n', '<leader>sb', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
@@ -620,35 +615,26 @@ vim.keymap.set('n', '<leader>sb', function()
   })
 end, { desc = 'search buffer' })
 
-
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>ee', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>eq', vim.diagnostic.setloclist)
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
-    virtual_text = false,
-    signs = true,
-    update_in_insert = false,
-  }
-)
-
-
-
-
+vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  underline = true,
+  virtual_text = false,
+  signs = true,
+  update_in_insert = false,
+})
 
 -- Restore cursor position
-vim.api.nvim_create_autocmd({ "BufReadPost" }, {
-  pattern = { "*" },
+vim.api.nvim_create_autocmd({ 'BufReadPost' }, {
+  pattern = { '*' },
   callback = function()
     vim.api.nvim_exec('silent! normal! g`"zv', false)
   end,
 })
-
-
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
