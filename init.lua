@@ -153,6 +153,7 @@ require('lazy').setup({
     opts = {
       use_magit_keybindings = true,
       disable_commit_confirmation = true,
+      disable_insert_on_commit = false,
       mappings = {
         status = {
           ["<ESC>"] = "Close"
