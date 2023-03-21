@@ -443,9 +443,9 @@ local on_attach = function(_, bufnr)
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>cfa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>cfr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>cfl', function()
+  nmap('<leader>cFa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+  nmap('<leader>cFr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+  nmap('<leader>cFl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
@@ -595,6 +595,11 @@ leadercmdmap('tn', 'ColorizerToggle')
 
 leader_prefix('q', 'quit')
 leadermap('qq', '<cmd>quitall<CR>', 'quit')
+
+leadermap("cf", function()
+  vim.cmd "Format"
+  vim.cmd "write"
+end)
 
 leader_prefix('<Tab>', 'tabs')
 leadermap('<Tab>n', '<cmd>tabnew<CR>', 'new tab')
