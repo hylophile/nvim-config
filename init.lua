@@ -141,6 +141,18 @@ require('lazy').setup({
   --   vim.cmd.colorscheme 'flatwhite'
   -- end,
   -- },
+  {
+    'TimUntersberger/neogit',
+    dependencies = 'nvim-lua/plenary.nvim',
+    opts = {
+      use_magit_keybindings = true,
+      mappings = {
+        status = {
+          ["<ESC>"] = "Close"
+        }
+      }
+    }
+  },
 
   {
     'ahmedkhalf/project.nvim',
@@ -627,6 +639,10 @@ leader_prefix('h', 'help')
 leadermap('hk', "<cmd>lua require('telescope.builtin').keymaps{}<CR>", 'keys')
 leadermap('ha', require('telescope.builtin').help_tags, 'apropos')
 -- S : Search
+--
+
+leader_prefix('g', 'git')
+leadercmdmap('gg', "Neogit")
 
 leader_prefix('s', 'search')
 leadermap('sp', "<cmd>lua require('telescope.builtin').live_grep{}<CR>", 'search project')
