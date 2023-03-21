@@ -698,6 +698,8 @@ vim.api.nvim_create_autocmd({ 'BufReadPost' }, {
 vim.cmd [[autocmd FileType help wincmd L]]
 
 vim.keymap.set('n', '<ESC>', '<cmd>nohls<CR>')
+vim.keymap.set('n', '<C-c>', '<cmd>xit<CR>')
+vim.keymap.set('n', '<C-k>', '<cmd>q!<CR>')
 
 vim.o.cursorline = true
 
