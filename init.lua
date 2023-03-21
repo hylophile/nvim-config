@@ -589,7 +589,8 @@ leadermap('fg', require('telescope.builtin').git_files)
 leadermap('fp', "<cmd>lua require('telescope.builtin').find_files { cwd = '~/.config/nvim' }<CR>", 'config files')
 
 leader_prefix('t', 'toggle')
-leadercmdmap('tt', 'split +terminal')
+leadercmdmap('tt', 'split +terminal') -- not really toggling
+leadercmdmap('tn', 'ColorizerToggle')
 
 leader_prefix('q', 'quit')
 leadermap('qq', '<cmd>quitall<CR>', 'quit')
