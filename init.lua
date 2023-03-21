@@ -142,10 +142,17 @@ require('lazy').setup({
   -- end,
   -- },
   {
+    'windwp/nvim-autopairs',
+    config = function()
+      require('nvim-autopairs').setup()
+    end,
+  },
+  {
     'TimUntersberger/neogit',
     dependencies = 'nvim-lua/plenary.nvim',
     opts = {
       use_magit_keybindings = true,
+      disable_commit_confirmation = true,
       mappings = {
         status = {
           ["<ESC>"] = "Close"
