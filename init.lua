@@ -699,6 +699,7 @@ vim.cmd [[autocmd FileType help wincmd L]]
 
 vim.keymap.set('n', '<ESC>', '<cmd>nohls<CR>')
 
+vim.o.cursorline = true
 
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "nvim_treesitter#foldexpr()"
