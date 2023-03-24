@@ -121,6 +121,7 @@ require('lazy').setup({
   --     vim.cmd.colorscheme 'onedark'
   --   end,
   -- },
+  {'mg979/vim-visual-multi'},
 
   {
     'catppuccin/nvim',
@@ -207,6 +208,7 @@ require('lazy').setup({
     },
   },
   { 'rmagatti/auto-session' },
+  { 'RRethy/vim-illuminate' },
   { 'nvim-treesitter/playground' },
   {
     dir = '~/code/misc/flatwhite.nvim',
@@ -663,6 +665,8 @@ leadermap('sp', "<cmd>lua require('telescope.builtin').live_grep{}<CR>", 'search
 leadermap('/', "<cmd>lua require('telescope.builtin').live_grep{}<CR>", 'search project')
 leadermap('sr', "<cmd>lua require('telescope.builtin').lsp_references{}<CR>") -- ???
 leadermap('ss', "<cmd>lua require('telescope.builtin').lsp_workspace_symbols{}<CR>")
+leadermap('sb', "<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find<CR>")
+leadercmdmap('st', "Telescope")
 -- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 
@@ -706,6 +710,7 @@ vim.cmd [[autocmd FileType help wincmd L]]
 vim.keymap.set('n', '<ESC>', '<cmd>nohls<CR>')
 vim.keymap.set('n', '<C-c>', '<cmd>xit<CR>')
 vim.keymap.set('n', '<C-k>', '<cmd>q!<CR>')
+vim.keymap.set("n", "<F8>", "<cmd>so $VIMRUNTIME/syntax/hitest.vim<CR>")
 
 vim.o.cursorline = true
 
