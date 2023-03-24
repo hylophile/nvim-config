@@ -98,7 +98,10 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  {
+    'folke/which-key.nvim',
+    opts = {}
+  },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -121,7 +124,7 @@ require('lazy').setup({
   --     vim.cmd.colorscheme 'onedark'
   --   end,
   -- },
-  {'mg979/vim-visual-multi'},
+  { 'mg979/vim-visual-multi' },
 
   {
     'catppuccin/nvim',
@@ -716,6 +719,15 @@ vim.o.cursorline = true
 
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-vim.api.nvim_create_autocmd({ "BufEnter" }, { pattern = { "*" }, command = "normal zx", })
+vim.api.nvim_create_autocmd(
+  { "BufEnter" },
+  {
+    pattern = { "*" },
+    callback = function()
+      vim.cmd "normal zx"
+      vim.cmd "normal zR"
+    end,
+  })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
