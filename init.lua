@@ -379,8 +379,19 @@ require('nvim-treesitter.configs').setup {
         ['ia'] = '@parameter.inner',
         ['af'] = '@function.outer',
         ['if'] = '@function.inner',
+        ['aF'] = '@call.outer',
+        ['iF'] = '@call.inner',
+        ['ax'] = '@block.outer',
+        ['a='] = '@assignment.outer',
+        -- ['ay'] = '@statement.outer',
         ['ac'] = '@class.outer',
         ['ic'] = '@class.inner',
+        ['av'] = '@conditional.outer',
+        ['iv'] = '@conditional.inner',
+        ['al'] = '@loop.outer',
+        ['il'] = '@loop.inner',
+        ['ak'] = '@key.outer',
+        ['ik'] = '@key.inner',
       },
     },
     move = {
@@ -406,10 +417,10 @@ require('nvim-treesitter.configs').setup {
     swap = {
       enable = true,
       swap_next = {
-        ['<leader>a'] = '@parameter.inner',
+        ['gza'] = '@parameter.inner',
       },
       swap_previous = {
-        ['<leader>A'] = '@parameter.inner',
+        ['gzA'] = '@parameter.inner',
       },
     },
   },
