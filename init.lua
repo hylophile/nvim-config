@@ -90,6 +90,7 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
+  { 'fedepujol/move.nvim' },
 
   {
     -- Autocompletion
@@ -740,6 +741,23 @@ vim.api.nvim_create_autocmd(
       vim.cmd "normal zR"
     end,
   })
+
+local opts = { noremap = true, silent = true }
+
+vim.keymap.set('v', '<', '<gv', opts)
+vim.keymap.set('v', '>', '>gv', opts)
+
+-- Normal-mode commands
+vim.keymap.set('n', '<M-Down>', ':MoveLine(1)<CR>', opts)
+vim.keymap.set('n', '<M-Up>', ':MoveLine(-1)<CR>', opts)
+vim.keymap.set('n', '<M-Left>', ':MoveHChar(-1)<CR>', opts)
+vim.keymap.set('n', '<M-Right>', ':MoveHChar(1)<CR>', opts)
+
+-- Visual-mode commands
+vim.keymap.set('v', '<M-Down>', ':MoveBlock(1)<CR>', opts)
+vim.keymap.set('v', '<M-Up>', ':MoveBlock(-1)<CR>', opts)
+vim.keymap.set('v', '<M-Left>', ':MoveHBlock(-1)<CR>', opts)
+vim.keymap.set('v', '<M-Right>', ':MoveHBlock(1)<CR>', opts)
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
