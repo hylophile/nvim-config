@@ -725,8 +725,9 @@ vim.keymap.set('n', '<ESC>', '<cmd>nohls<CR>')
 vim.keymap.set('n', '<C-c>', '<cmd>xit<CR>')
 vim.keymap.set('n', '<C-k>', '<cmd>q!<CR>')
 vim.keymap.set("n", "<F8>", "<cmd>so $VIMRUNTIME/syntax/hitest.vim<CR>")
-
 vim.o.cursorline = true
+vim.o.gdefault = true
+
 
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "nvim_treesitter#foldexpr()"
