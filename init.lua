@@ -711,14 +711,18 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 
 -- L : Lists
 leadermap('ll', "<cmd>lua require('telescope.builtin').loclist{}<CR>")
+leadermap('ll', "<cmd>lua require('telescope.builtin').loclist{}<CR>")
 leadermap('lq', "<cmd>lua require('telescope.builtin').quickfix{}<CR>")
+
+vim.keymap.set('n', '<leader>lt', function()
+  vim.cmd ':Telescope'
+end)
+
+leadermap('ht', "<cmd>lua require('telescope.builtin').colorscheme{}<CR>")
 
 vim.keymap.set('n', '<leader>sb', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
-  })
+  require('telescope.builtin').current_buffer_fuzzy_find {}
 end, { desc = 'search buffer' })
 
 -- Diagnostic keymaps
