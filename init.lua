@@ -448,6 +448,8 @@ local on_attach = function(_, bufnr)
 
   nmap('<leader>cr', vim.lsp.buf.rename, '[R]ename')
   nmap('<leader>ca', vim.lsp.buf.code_action, 'Code [A]ction')
+  nmap('<leader>cx', vim.diagnostic.open_float)
+  nmap('<leader>ce', vim.diagnostic.setloclist)
 
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
@@ -569,9 +571,28 @@ cmp.setup {
 }
 
 if vim.g.neovide then
-  vim.o.guifont = 'Agave:h13' -- text below applies for VimScript
+  vim.o.guifont = 'Agave:h14' -- text below applies for VimScript
   vim.g.neovide_cursor_vfx_mode = 'torpedo'
-  vim.g.neovide_cursor_vfx_particle_lifetime = 1.0
+  -- vim.g.neovide_cursor_vfx_particle_lifetime = 1.0
+  --
+  --
+
+  vim.keymap.set('n', '<S-Insert>', '"*P') -- Paste normal mode
+  vim.keymap.set('i', '<S-Insert>', '"*P') -- Paste normal mode
+
+  vim.g.neovide_scale_factor = 1.0
+  local change_scale_factor = function(delta)
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+  end
+  vim.keymap.set('n', '<C-=>', function()
+    vim.g.neovide_scale_factor = 1.0
+  end)
+  vim.keymap.set('n', '<C-+>', function()
+    change_scale_factor(1.25)
+  end)
+  vim.keymap.set('n', '<C-->', function()
+    change_scale_factor(1 / 1.25)
+  end)
 end
 
 local leadermap = function(keys, func, desc)
@@ -703,8 +724,8 @@ end, { desc = 'search buffer' })
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>ee', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>eq', vim.diagnostic.setloclist)
+-- vim.keymap.set('n', '<leader>ee', vim.diagnostic.open_float)
+-- vim.keymap.set('n', '<leader>eq', vim.diagnostic.setloclist)
 
 -- vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
 --   underline = true,
