@@ -101,8 +101,9 @@ require('lazy').setup({
   -- Useful plugin to show you pending keybinds.
   {
     'folke/which-key.nvim',
-    opts = {}
+    opts = {},
   },
+  { 'sbdchd/neoformat' },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -161,11 +162,12 @@ require('lazy').setup({
       disable_insert_on_commit = false,
       mappings = {
         status = {
-          ["<ESC>"] = "Close"
-        }
-      }
-    }
+          ['<ESC>'] = 'Close',
+        },
+      },
+    },
   },
+  { 'Pocco81/true-zen.nvim' },
 
   {
     'ahmedkhalf/project.nvim',
@@ -223,7 +225,7 @@ require('lazy').setup({
   },
   { 'norcalli/nvim-colorizer.lua' },
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',         opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -596,7 +598,6 @@ leadercmdmap('ir', 'Telescope registers')
 
 leadercmdmap('pp', 'Telescope projects')
 
-
 leadermap(',', require('telescope.builtin').buffers, 'buffers') --, { desc = '[,] Find existing buffers' })
 -- See `:help telescope.builtin`
 -- F : File
@@ -613,9 +614,9 @@ leadercmdmap('tn', 'ColorizerToggle')
 leader_prefix('q', 'quit')
 leadermap('qq', '<cmd>quitall<CR>', 'quit')
 
-leadermap("cf", function()
-  vim.cmd "Format"
-  vim.cmd "write"
+leadermap('cf', function()
+  vim.cmd 'Format'
+  vim.cmd 'write'
 end)
 
 leader_prefix('<Tab>', 'tabs')
@@ -673,7 +674,7 @@ leadermap('ha', require('telescope.builtin').help_tags, 'apropos')
 --
 
 leader_prefix('g', 'git')
-leadercmdmap('gg', "Neogit")
+leadercmdmap('gg', 'Neogit')
 
 leader_prefix('s', 'search')
 leadermap('sp', "<cmd>lua require('telescope.builtin').live_grep{}<CR>", 'search project')
@@ -681,7 +682,7 @@ leadermap('/', "<cmd>lua require('telescope.builtin').live_grep{}<CR>", 'search 
 leadermap('sr', "<cmd>lua require('telescope.builtin').lsp_references{}<CR>") -- ???
 leadermap('ss', "<cmd>lua require('telescope.builtin').lsp_workspace_symbols{}<CR>")
 leadermap('sb', "<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find<CR>")
-leadercmdmap('st', "Telescope")
+leadercmdmap('st', 'Telescope')
 -- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 
@@ -705,11 +706,17 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>ee', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>eq', vim.diagnostic.setloclist)
 
-vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  underline = true,
-  virtual_text = false,
-  signs = true,
-  update_in_insert = false,
+-- vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+--   underline = true,
+--   virtual_text = false,
+--   signs = true,
+--   update_in_insert = false,
+-- })
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+  callback = function()
+    vim.cmd ':Neoformat'
+  end,
 })
 
 -- Restore cursor position
@@ -725,22 +732,19 @@ vim.cmd [[autocmd FileType help wincmd L]]
 vim.keymap.set('n', '<ESC>', '<cmd>nohls<CR>')
 vim.keymap.set('n', '<C-c>', '<cmd>xit<CR>')
 vim.keymap.set('n', '<C-k>', '<cmd>q!<CR>')
-vim.keymap.set("n", "<F8>", "<cmd>so $VIMRUNTIME/syntax/hitest.vim<CR>")
+vim.keymap.set('n', '<F8>', '<cmd>so $VIMRUNTIME/syntax/hitest.vim<CR>')
 vim.o.cursorline = true
 vim.o.gdefault = true
 
-
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-vim.api.nvim_create_autocmd(
-  { "BufEnter" },
-  {
-    pattern = { "*" },
-    callback = function()
-      vim.cmd "normal zx"
-      vim.cmd "normal zR"
-    end,
-  })
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+  pattern = { '*' },
+  callback = function()
+    vim.cmd 'normal zx'
+    vim.cmd 'normal zR'
+  end,
+})
 
 local opts = { noremap = true, silent = true }
 
