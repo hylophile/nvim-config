@@ -103,6 +103,14 @@ require('lazy').setup({
     'folke/which-key.nvim',
     opts = {},
   },
+  -- { 'simrat39/inlay-hints.nvim' },
+  { 'simrat39/rust-tools.nvim', event = 'BufEnter *.rs', opts = {
+    tools = {
+      inlay_hints = {
+        only_current_line = true,
+      },
+    },
+  } },
   { 'sbdchd/neoformat' },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
@@ -315,6 +323,7 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+vim.o.title = true
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -431,50 +440,51 @@ require('nvim-treesitter.configs').setup {
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
-  -- NOTE: Remember that lua is a real programming language, and as such it is possible
-  -- to define small helper and utility functions so you don't have to repeat yourself
-  -- many times.
-  --
-  -- In this case, we create a function that lets us more easily define mappings specific
-  -- for LSP related items. It sets the mode, buffer and description for us each time.
-  local nmap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
-
-    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+local nmap = function(keys, func, desc)
+  if desc then
+    desc = 'LSP: ' .. desc
   end
 
-  nmap('<leader>cr', vim.lsp.buf.rename, '[R]ename')
-  nmap('<leader>ca', vim.lsp.buf.code_action, 'Code [A]ction')
-  nmap('<leader>cx', vim.diagnostic.open_float)
-  nmap('<leader>ce', vim.diagnostic.setloclist)
-
-  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-  nmap('<leader>cD', vim.lsp.buf.type_definition, 'Type [D]efinition')
-  nmap('<leader>cS', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>cs', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-  -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-  -- Lesser used LSP functionality
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>cFa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>cFr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>cFl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, '[W]orkspace [L]ist Folders')
-
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
+  vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 end
+
+nmap('<leader>cr', vim.lsp.buf.rename, '[R]ename')
+nmap('<leader>ca', vim.lsp.buf.code_action, 'Code [A]ction')
+nmap('<leader>cx', vim.diagnostic.open_float)
+nmap('<leader>ce', vim.diagnostic.setloclist)
+
+nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+nmap('<leader>cD', vim.lsp.buf.type_definition, 'Type [D]efinition')
+nmap('<leader>cS', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+nmap('<leader>cs', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+-- See `:help K` for why this keymap
+nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+-- Lesser used LSP functionality
+nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+nmap('<leader>cFa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+nmap('<leader>cFr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+nmap('<leader>cFl', function()
+  print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+end, '[W]orkspace [L]ist Folders')
+-- local on_attach = function(c, bufnr)
+--   -- require('inlay-hints').on_attach(c, bufnr)
+--   -- NOTE: Remember that lua is a real programming language, and as such it is possible
+--   -- to define small helper and utility functions so you don't have to repeat yourself
+--   -- many times.
+--   --
+--   -- In this case, we create a function that lets us more easily define mappings specific
+--   -- for LSP related items. It sets the mode, buffer and description for us each time.
+--
+--   -- Create a command `:Format` local to the LSP buffer
+--   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+--     vim.lsp.buf.format()
+--   end, { desc = 'Format current buffer with LSP' })
+-- end
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -485,7 +495,7 @@ local servers = {
   -- clangd = {},
   -- gopls = {},
   pyright = {},
-  rust_analyzer = {},
+  -- rust_analyzer = {},
   tsserver = {},
   svelte = {},
   tailwindcss = {},
@@ -519,7 +529,7 @@ mason_lspconfig.setup_handlers {
   function(server_name)
     require('lspconfig')[server_name].setup {
       capabilities = capabilities,
-      on_attach = on_attach,
+      -- on_attach = on_attach,
       settings = servers[server_name],
     }
   end,
@@ -584,14 +594,17 @@ if vim.g.neovide then
   local change_scale_factor = function(delta)
     vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
   end
+
+  local scale_factor = 1.1
+
   vim.keymap.set('n', '<C-=>', function()
     vim.g.neovide_scale_factor = 1.0
   end)
   vim.keymap.set('n', '<C-+>', function()
-    change_scale_factor(1.25)
+    change_scale_factor(scale_factor)
   end)
   vim.keymap.set('n', '<C-->', function()
-    change_scale_factor(1 / 1.25)
+    change_scale_factor(1 / scale_factor)
   end)
 end
 
@@ -720,6 +733,8 @@ end)
 
 leadermap('ht', "<cmd>lua require('telescope.builtin').colorscheme{}<CR>")
 
+-- vim.g.title
+
 vim.keymap.set('n', '<leader>sb', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find {}
@@ -731,12 +746,12 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 -- vim.keymap.set('n', '<leader>ee', vim.diagnostic.open_float)
 -- vim.keymap.set('n', '<leader>eq', vim.diagnostic.setloclist)
 
--- vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
---   underline = true,
---   virtual_text = false,
---   signs = true,
---   update_in_insert = false,
--- })
+vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  underline = true,
+  virtual_text = true,
+  signs = true,
+  update_in_insert = true,
+})
 
 vim.api.nvim_create_autocmd('BufWritePre', {
   callback = function()
@@ -744,11 +759,18 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   end,
 })
 
+-- vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+--   pattern = { '*.rs' },
+--   callback = function()
+--     require('lsp_extensions').inlay_hints { only_current_line = true }
+--   end,
+-- })
+
 -- Restore cursor position
 vim.api.nvim_create_autocmd({ 'BufReadPost' }, {
   pattern = { '*' },
   callback = function()
-    vim.api.nvim_exec('silent! normal! g`"zv', false)
+    vim.cmd 'silent! normal! g`"zv'
   end,
 })
 
@@ -788,5 +810,8 @@ vim.keymap.set('v', '<M-Up>', ':MoveBlock(-1)<CR>', opts)
 vim.keymap.set('v', '<M-Left>', ':MoveHBlock(-1)<CR>', opts)
 vim.keymap.set('v', '<M-Right>', ':MoveHBlock(1)<CR>', opts)
 
+vim.keymap.set({ 'n', 'i' }, '<C-s>', function()
+  vim.cmd ':write'
+end)
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
