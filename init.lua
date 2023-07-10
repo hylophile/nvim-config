@@ -813,5 +813,29 @@ vim.keymap.set('v', '<M-Right>', ':MoveHBlock(1)<CR>', opts)
 vim.keymap.set({ 'n', 'i' }, '<C-s>', function()
   vim.cmd ':write'
 end)
+
+-- set theme according to time
+local timer = vim.loop.new_timer()
+if timer then
+  local light_theme = 'flatwhite'
+  local dark_theme = 'catppuccin-mocha'
+  local function is_daytime(hour)
+    return hour > 8 and hour < 20
+  end
+
+  timer:start(
+    0,
+    600,
+    vim.schedule_wrap(function()
+      local hour = tonumber(os.date '%H')
+      local theme = dark_theme
+      if is_daytime(hour) then
+        theme = light_theme
+      end
+      vim.cmd('colorscheme ' .. theme)
+    end)
+  )
+end
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
