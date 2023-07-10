@@ -98,6 +98,7 @@ require('lazy').setup({
     dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
   },
 
+  { 'nvim-telescope/telescope-file-browser.nvim', dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' } },
   -- Useful plugin to show you pending keybinds.
   {
     'folke/which-key.nvim',
@@ -276,7 +277,7 @@ require('lazy').setup({
   --
   --    An additional note is that if you only copied in the `init.lua`, you can just comment this line
   --    to get rid of the warning telling you that there are not plugins in `lua/custom/plugins/`.
-  { import = 'custom.plugins' },
+  { import = 'plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -620,11 +621,13 @@ end
 
 local leader_prefix = function(key, name)
   require('which-key').register({
+
     [key] = {
       name = name,
     },
   }, { prefix = '<leader>' })
 end
+
 -- vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 
 leader_prefix('i', 'insert')
@@ -636,9 +639,11 @@ leadermap(',', require('telescope.builtin').buffers, 'buffers') --, { desc = '[,
 -- See `:help telescope.builtin`
 -- F : File
 leader_prefix('f', 'files')
+leadermap('ff', ':Telescope file_browser path=%:p:h select_buffer=true<CR>', 'find file')
+require('telescope').load_extension 'file_browser'
 leadermap('fr', require('telescope.builtin').oldfiles, 'recent files')
 leadermap('fs', '<cmd>write<CR>', 'save file')
-leadermap('fg', require('telescope.builtin').git_files)
+-- leadermap('fg', require('telescope.builtin').git_files)
 leadermap('fp', "<cmd>lua require('telescope.builtin').find_files { cwd = '~/.config/nvim' }<CR>", 'config files')
 
 leader_prefix('t', 'toggle')
@@ -785,13 +790,13 @@ vim.o.gdefault = true
 
 vim.o.foldmethod = 'expr'
 vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
-vim.api.nvim_create_autocmd({ 'BufEnter' }, {
-  pattern = { '*' },
-  callback = function()
-    vim.cmd 'normal zx'
-    vim.cmd 'normal zR'
-  end,
-})
+-- vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+--   pattern = { '*' },
+--   callback = function()
+--     vim.cmd 'normal zx'
+--     vim.cmd 'normal zR'
+--   end,
+-- })
 
 local opts = { noremap = true, silent = true }
 
