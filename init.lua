@@ -820,9 +820,10 @@ vim.keymap.set({ 'n', 'i' }, '<C-s>', function()
 end)
 
 -- set theme according to time
+vim.g.theme = 'flatwhite'
 local timer = vim.loop.new_timer()
 if timer then
-  local light_theme = 'flatwhite'
+  local light_theme = vim.g.theme
   local dark_theme = 'catppuccin-mocha'
   local function is_daytime(hour)
     return hour > 8 and hour < 20
@@ -830,14 +831,13 @@ if timer then
 
   timer:start(
     0,
-    600,
+    1000, -- * 60 * 60,
     vim.schedule_wrap(function()
       local hour = tonumber(os.date '%H')
-      local theme = dark_theme
-      if is_daytime(hour) then
-        theme = light_theme
+      local theme = is_daytime(hour) and light_theme or dark_theme
+      if theme ~= vim.g.theme then
+        vim.cmd('colorscheme ' .. theme)
       end
-      vim.cmd('colorscheme ' .. theme)
     end)
   )
 end
