@@ -263,7 +263,24 @@ require('lazy').setup({
       show_trailing_blankline_indent = false,
     },
   },
-  { 'rmagatti/auto-session' },
+  {
+    'gbprod/yanky.nvim',
+    keys = {
+      { mode = { 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)' },
+      { mode = { 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)' },
+      { mode = { 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)' },
+      { mode = { 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)' },
+      { mode = 'n', '<c-p>', '<Plug>(YankyCycleForward)' },
+      { mode = 'n', '<c-n>', '<Plug>(YankyCycleBackward)' },
+    },
+    config = function()
+      require('yanky').setup {}
+    end,
+  },
+  { 'rmagatti/auto-session', keys = {
+    { '<leader>qs', '<Cmd>SessionSave<CR>' },
+    { '<leader>qd', '<Cmd>SessionDelete<CR>' },
+  } },
   { 'RRethy/vim-illuminate' },
   { 'nvim-treesitter/playground' },
   {
@@ -635,7 +652,7 @@ if vim.g.neovide then
   --
 
   vim.keymap.set('n', '<S-Insert>', '"*P') -- Paste normal mode
-  vim.keymap.set('i', '<S-Insert>', '"*P') -- Paste normal mode
+  vim.keymap.set('i', '<S-Insert>', '<Esc>l"*Pi') -- Paste normal mode
 
   vim.g.neovide_scale_factor = 1.0
   local change_scale_factor = function(delta)
@@ -878,11 +895,12 @@ if timer then
 
   timer:start(
     0,
-    1000, -- * 60 * 60,
+    1000 * 60 * 60,
     vim.schedule_wrap(function()
       local hour = tonumber(os.date '%H')
       local theme = is_daytime(hour) and light_theme or dark_theme
       if theme ~= vim.g.theme then
+        vim.g.theme = theme
         vim.cmd('colorscheme ' .. theme)
       end
     end)
