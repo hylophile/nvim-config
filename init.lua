@@ -84,14 +84,23 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim', opts = {}, tag = 'legacy' },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
     },
   },
   { 'fedepujol/move.nvim' },
-
+  {
+    'nvim-tree/nvim-tree.lua',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    keys = {
+      { '<leader>tf', '<cmd>NvimTreeToggle<cr>', desc = 'NvimTree' },
+    },
+    config = function()
+      require('nvim-tree').setup()
+    end,
+  },
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -105,13 +114,33 @@ require('lazy').setup({
     opts = {},
   },
   -- { 'simrat39/inlay-hints.nvim' },
-  { 'simrat39/rust-tools.nvim', event = 'BufEnter *.rs', opts = {
-    tools = {
-      inlay_hints = {
-        only_current_line = true,
+  {
+    'simrat39/rust-tools.nvim',
+    event = 'BufEnter *.rs',
+    opts = {
+      tools = {
+        inlay_hints = {
+          -- only_current_line = true,
+        },
+        on_attach = function(_, bufnr)
+          local rt = require 'rust-tools'
+          -- Hover actions
+          vim.keymap.set('n', '<C-space>', rt.hover_actions.hover_actions, { buffer = bufnr })
+          -- Code action groups
+          vim.keymap.set('n', '<Leader>a', rt.code_action_group.code_action_group, { buffer = bufnr })
+        end,
       },
     },
-  } },
+  },
+  {
+    'folke/trouble.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+  },
   { 'sbdchd/neoformat' },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
@@ -135,7 +164,19 @@ require('lazy').setup({
   --     vim.cmd.colorscheme 'onedark'
   --   end,
   -- },
-  { 'mg979/vim-visual-multi' },
+  {
+    'mg979/vim-visual-multi',
+    keys = {
+      '<M-d>',
+      '<C-down>',
+      '<C-up>',
+    },
+    init = function()
+      vim.g.VM_maps = {
+        ['Find Under'] = '<M-d>',
+      }
+    end,
+  },
 
   {
     'catppuccin/nvim',
@@ -449,6 +490,9 @@ local nmap = function(keys, func, desc)
   vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 end
 
+vim.keymap.set('i', '<C-n>', '<C-x><C-n>')
+vim.keymap.set('i', '<C-BS>', '<C-w>')
+
 nmap('<leader>cr', vim.lsp.buf.rename, '[R]ename')
 nmap('<leader>ca', vim.lsp.buf.code_action, 'Code [A]ction')
 nmap('<leader>cx', vim.diagnostic.open_float)
@@ -581,6 +625,8 @@ cmp.setup {
   },
 }
 
+vim.keymap.set('n', 'vag', 'ggVG', { desc = 'whole buffer' })
+
 if vim.g.neovide then
   vim.o.guifont = 'Agave:h14' -- text below applies for VimScript
   vim.g.neovide_cursor_vfx_mode = 'torpedo'
@@ -696,6 +742,7 @@ leadercmdmap('wR', 'wincmd R')
 leadercmdmap('w=', 'wincmd =')
 
 leader_prefix('c', 'LSP')
+leadermap('cx', require('telescope.builtin').diagnostics)
 
 leadermap('<Space>', '<cmd>Telescope find_files<CR>')
 -- leadermap("<Space>", "<cmd>lua require('telescope.builtin').git_files{ show_untracked = true }<CR>")
@@ -841,6 +888,16 @@ if timer then
     end)
   )
 end
+
+require('auto-session').setup {}
+
+-- Lua
+vim.keymap.set('n', '<leader>xx', '<cmd>TroubleToggle<cr>', { silent = true, noremap = true })
+vim.keymap.set('n', '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<cr>', { silent = true, noremap = true })
+vim.keymap.set('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>', { silent = true, noremap = true })
+vim.keymap.set('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', { silent = true, noremap = true })
+vim.keymap.set('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', { silent = true, noremap = true })
+vim.keymap.set('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', { silent = true, noremap = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
