@@ -927,5 +927,14 @@ vim.keymap.set('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', { silent = t
 vim.keymap.set('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', { silent = true, noremap = true })
 vim.keymap.set('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', { silent = true, noremap = true })
 
+-- Show all diagnostics on current line in floating window
+vim.api.nvim_set_keymap('n', '<Leader>dd', ':lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
+-- Go to next diagnostic (if there are multiple on the same line, only shows
+-- one at a time in the floating window)
+vim.api.nvim_set_keymap('n', '<Leader>dn', ':lua vim.diagnostic.goto_next()<CR>', { noremap = true, silent = true })
+-- Go to prev diagnostic (if there are multiple on the same line, only shows
+-- one at a time in the floating window)
+vim.api.nvim_set_keymap('n', '<Leader>dp', ':lua vim.diagnostic.goto_prev()<CR>', { noremap = true, silent = true })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
