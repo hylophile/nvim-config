@@ -908,7 +908,16 @@ if timer then
   )
 end
 
-require('auto-session').setup {}
+vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+require('auto-session').setup {
+  post_restore_cmds = {
+    function()
+      vim.wait(100, function()
+        vim.cmd 'wincmd ='
+      end)
+    end,
+  },
+}
 
 -- Lua
 vim.keymap.set('n', '<leader>xx', '<cmd>TroubleToggle<cr>', { silent = true, noremap = true })
