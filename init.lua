@@ -1,40 +1,40 @@
 --[[
 
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
+  =====================================================================
+  ==================== READ THIS BEFORE CONTINUING ====================
+  =====================================================================
 
-Kickstart.nvim is *not* a distribution.
+  Kickstart.nvim is *not* a distribution.
 
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, and understand
-  what your configuration is doing.
+  Kickstart.nvim is a template for your own configuration.
+    The goal is that you can read every line of code, top-to-bottom, and understand
+    what your configuration is doing.
 
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
+    Once you've done that, you should start exploring, configuring and tinkering to
+    explore Neovim!
 
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
+    If you don't know anything about Lua, I recommend taking some time to read through
+    a guide. One possible example:
+    - https://learnxinyminutes.com/docs/lua/
 
-  And then you can explore or search through `:help lua-guide`
+    And then you can explore or search through `:help lua-guide`
 
 
-Kickstart Guide:
+  Kickstart Guide:
 
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
+  I have left several `:help X` comments throughout the init.lua
+  You should run that command and read that help section for more information.
 
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
+  In addition, I have some `NOTE:` items throughout the file.
+  These are for you, the reader to help understand what is happening. Feel free to delete
+  them once you know what you're doing, but they should serve as a guide for when you
+  are first encountering a few different constructs in your nvim config.
 
-I hope you enjoy your Neovim journey,
-- TJ
+  I hope you enjoy your Neovim journey,
+  - TJ
 
-P.S. You can delete this when you're done too. It's your config now :)
---]]
+  P.S. You can delete this when you're done too. It's your config now :)
+  --]]
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -105,7 +105,16 @@ require('lazy').setup({
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    dependencies = {
+      'onsails/lspkind.nvim',
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      'hrsh7th/cmp-nvim-lsp',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+    },
   },
 
   { 'nvim-telescope/telescope-file-browser.nvim', dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' } },
@@ -377,6 +386,8 @@ vim.o.updatetime = 250
 vim.o.timeout = true
 vim.o.timeoutlen = 300
 
+vim.o.pumheight = 15
+
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
@@ -508,7 +519,7 @@ local nmap = function(keys, func, desc)
   vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 end
 
-vim.keymap.set('i', '<C-n>', '<C-x><C-n>')
+-- vim.keymap.set('i', '<C-n>', '<C-x><C-n>')
 vim.keymap.set('i', '<C-BS>', '<C-w>')
 
 nmap('<leader>cr', vim.lsp.buf.rename, '[R]ename')
@@ -610,6 +621,19 @@ cmp.setup {
       luasnip.lsp_expand(args.body)
     end,
   },
+  formatting = {
+    format = function(entry, vim_item)
+      if vim.tbl_contains({ 'path' }, entry.source.name) then
+        local icon, hl_group = require('nvim-web-devicons').get_icon(entry:get_completion_item().label)
+        if icon then
+          vim_item.kind = icon
+          vim_item.kind_hl_group = hl_group
+          return vim_item
+        end
+      end
+      return require('lspkind').cmp_format { with_text = false }(entry, vim_item)
+    end,
+  },
   mapping = cmp.mapping.preset.insert {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -637,11 +661,41 @@ cmp.setup {
       end
     end, { 'i', 's' }),
   },
+  -- experimental = {
+  --   ghost_text = true,
+  -- },
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    {
+      name = 'buffer',
+      max_item_count = 5,
+      keyword_length = 3,
+      option = {
+        get_bufnrs = function()
+          return vim.api.nvim_list_bufs()
+        end,
+      },
+    },
   },
 }
+
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' },
+  },
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' },
+  }, {
+    { name = 'cmdline' },
+  }),
+})
 
 vim.keymap.set('n', 'vag', 'ggVG', { desc = 'whole buffer' })
 
@@ -649,7 +703,7 @@ if vim.g.neovide then
   vim.o.guifont = 'Agave:h14' -- text below applies for VimScript
   vim.g.neovide_cursor_vfx_mode = 'torpedo'
   -- vim.g.neovide_cursor_vfx_particle_lifetime = 1.0
-  vim.g.neovide_transparency = 0.9
+  vim.g.neovide_transparency = 0.95
   --
   --
 
@@ -824,7 +878,7 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagn
   update_in_insert = true,
 })
 
-vim.api.nvim_create_autocmd('BufWritePre', {
+vim.api.nvim_create_autocmd('BufWritePost', {
   callback = function()
     vim.cmd ':Neoformat'
   end,
@@ -836,6 +890,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 --     require('lsp_extensions').inlay_hints { only_current_line = true }
 --   end,
 -- })
+--
 
 -- Restore cursor position
 vim.api.nvim_create_autocmd({ 'BufReadPost' }, {
@@ -915,10 +970,24 @@ require('auto-session').setup {
     function()
       vim.wait(100, function()
         vim.cmd 'wincmd ='
+        return true
       end)
     end,
   },
 }
+
+vim.api.nvim_create_autocmd({ 'BufEnter', 'FocusGained', 'InsertLeave', 'WinEnter' }, {
+  callback = function()
+    vim.o.relativenumber = true
+  end,
+  pattern = '*',
+})
+vim.api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'InsertEnter', 'WinLeave' }, {
+  callback = function()
+    vim.o.relativenumber = false
+  end,
+  pattern = '*',
+})
 
 -- Lua
 vim.keymap.set('n', '<leader>xx', '<cmd>TroubleToggle<cr>', { silent = true, noremap = true })
