@@ -1,10 +1,10 @@
 return {
   {
     'chrisgrieser/nvim-spider',
-    lazy = true,
-    keys = {
-      { 'w', 'e', 'b', 'ge' },
-    },
+    -- lazy = true,
+    -- keys = {
+    --   { 'w', 'e', 'b', 'ge' },
+    -- },
     opts = {
       skipInsignificantPunctuation = false,
     },
