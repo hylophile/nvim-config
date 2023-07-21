@@ -39,7 +39,7 @@
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.maplocalleader = ','
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -114,6 +114,7 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp',
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip',
+      'PaterJason/cmp-conjure',
     },
   },
 
@@ -130,7 +131,7 @@ require('lazy').setup({
     opts = {
       tools = {
         inlay_hints = {
-          -- only_current_line = true,
+          only_current_line = true,
         },
         on_attach = function(_, bufnr)
           local rt = require 'rust-tools'
@@ -674,6 +675,7 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'conjure' },
     {
       name = 'buffer',
       max_item_count = 5,
