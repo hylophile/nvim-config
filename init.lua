@@ -363,7 +363,7 @@ require('lazy').setup({
 vim.o.hlsearch = true
 
 -- Make line numbers default
-vim.wo.number = true
+vim.o.number = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
