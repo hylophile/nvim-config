@@ -553,20 +553,20 @@ nmap('<leader>cFr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove F
 nmap('<leader>cFl', function()
   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, '[W]orkspace [L]ist Folders')
--- local on_attach = function(c, bufnr)
---   -- require('inlay-hints').on_attach(c, bufnr)
---   -- NOTE: Remember that lua is a real programming language, and as such it is possible
---   -- to define small helper and utility functions so you don't have to repeat yourself
---   -- many times.
---   --
---   -- In this case, we create a function that lets us more easily define mappings specific
---   -- for LSP related items. It sets the mode, buffer and description for us each time.
---
---   -- Create a command `:Format` local to the LSP buffer
---   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
---     vim.lsp.buf.format()
---   end, { desc = 'Format current buffer with LSP' })
--- end
+local on_attach = function(c, bufnr)
+  --   -- require('inlay-hints').on_attach(c, bufnr)
+  --   -- NOTE: Remember that lua is a real programming language, and as such it is possible
+  --   -- to define small helper and utility functions so you don't have to repeat yourself
+  --   -- many times.
+  --   --
+  --   -- In this case, we create a function that lets us more easily define mappings specific
+  --   -- for LSP related items. It sets the mode, buffer and description for us each time.
+  --
+  --   -- Create a command `:Format` local to the LSP buffer
+  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+    vim.lsp.buf.format()
+  end, { desc = 'Format current buffer with LSP' })
+end
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -578,6 +578,7 @@ local servers = {
   -- gopls = {},
   pyright = {},
   -- rust_analyzer = {},
+  -- "clojure-lsp" = {},
   tsserver = {},
   svelte = {},
   tailwindcss = {},
@@ -611,7 +612,7 @@ mason_lspconfig.setup_handlers {
   function(server_name)
     require('lspconfig')[server_name].setup {
       capabilities = capabilities,
-      -- on_attach = on_attach,
+      on_attach = on_attach,
       settings = servers[server_name],
     }
   end,
@@ -675,7 +676,7 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
-    { name = 'conjure' },
+    -- { name = 'conjure' },
     {
       name = 'buffer',
       max_item_count = 5,
